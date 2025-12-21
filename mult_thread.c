@@ -90,32 +90,28 @@ int main(int argc,char * argv[])
 	{
 		pthread_join(tid1,NULL);
 	}
-
-	printf("Mean : %f\n",mean);
-
 	if(pthread_create(&tid2,NULL,cal_median,NULL) != 0)
-        {
-                printf("Error!Process 2 failed");
-                return -1;
-        }
-        else
-        {
-                pthread_join(tid2,NULL);
-        }
-
-        printf("Median : %f\n",median);
-
+	{
+		printf("Error!Process 2 failed");
+		return -1;
+	}
+	else
+	{
+		pthread_join(tid2,NULL);
+	}
 	if(pthread_create(&tid3,NULL,cal_sd,NULL) != 0)
-        {
-                printf("Error!Process 3 failed");
-                return -1;
-        }
-        else
-        {
-                pthread_join(tid3,NULL);
-        }
-
-        printf("Standard Deviation : %f\n",sd);
+	{
+		printf("Error!Process 3 failed");
+		return -1;
+	}
+    else
+	{
+		pthread_join(tid3,NULL);
+	}
+	
+	printf("Thread ID : %ld\tMean : %f\n",tid1,mean);
+	printf("Thread ID : %ld\tMedian : %f\n",tid2,median);
+	printf("Thread ID : %ld\tStandard Deviation : %f\n",tid3,sd);
 
 	return 0;
 }
