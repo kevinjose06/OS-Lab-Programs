@@ -112,5 +112,7 @@ int main(int argc,char * argv[])
 }
 
 /*
-    Compilation command : gcc <filename> -pthread -lm
+    1)Compilation command : gcc <filename> -pthread -lm
+    2)Make sure to join thread 1 before executing thread 3 as,if not joined it may cause errors in the 
+    standrd deviation calculation
 */
