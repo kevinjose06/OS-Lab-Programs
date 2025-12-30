@@ -18,4 +18,8 @@ int main(int argc,char *argv[])
         return 0;
 }
 
-//I modified this question to add any number of integers received from the commmand line.
+/*
+1)I modified this question to add any number of integers received from the commmand line.
+2)Compilation command : gcc <filename> -o myadder.c(In the sum.c file i have given the name of the 
+executable file as myadder)
+/*
