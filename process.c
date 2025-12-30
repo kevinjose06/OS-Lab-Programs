@@ -9,7 +9,6 @@ process.
 int main()
 {
     pid_t pid;
-
     pid = fork();
 
     if (pid == 0)
