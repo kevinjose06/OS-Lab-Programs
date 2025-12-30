@@ -13,6 +13,7 @@ int main()
 
         pid = getpid();
         time(&t);
+        
         printf("PID : %d\n",pid);
         printf("Current system time: %s\n",ctime(&t));
         for(;;);
