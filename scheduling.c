@@ -13,10 +13,15 @@ struct process
 	int pid,at,bt,pr,rt,ct,tt,wt,c;
 };
 
-void fcfs(struct process *p,int n)
+struct stat
+{
+	float art,act,att,awt;
+};
+
+struct stat fcfs(struct process *p,int n)
 {
 	int t = 0,i;
-	float art = 0,act = 0,att = 0,awt = 0;
+	struct stat res = {0};
 
 	for(i = 0;i < n;i++)
 	{
@@ -28,15 +33,15 @@ void fcfs(struct process *p,int n)
 		p[i].wt = (p[i].tt - p[i].bt);
 		t = p[i].ct;
 
-		art += p[i].rt;
-		act += p[i].ct;
-		att += p[i].tt;
-		awt += p[i].wt;
+		res.art += p[i].rt;
+		res.act += p[i].ct;
+		res.att += p[i].tt;
+		res.awt += p[i].wt;
 	}
-	art /= n;
-	act /= n;
-	att /= n;
-	awt /= n;
+	res.art /= n;
+	res.act /= n;
+	res.att /= n;
+	res.awt /= n;
 
 	printf("\n\t-------------------------------------------FISRT COME FIRST SERVE------------------------------------------\n\n");
 	printf("---------------------------------------------------------------------------------------\n");
@@ -48,16 +53,19 @@ void fcfs(struct process *p,int n)
 		printf("| %-5d | %-5d | %-5d | %-5d | %-5d | %-5d | %-5d |\n",p[i].pid,p[i].at,p[i].bt,p[i].rt,p[i].ct,p[i].tt,p[i].wt);
 	}
 
-	printf("Average Response Time   : %.2f\n",art);
-	printf("Average Completion Time : %.2f\n",act);
-	printf("Average Turnaround Time : %.2f\n",att);
-	printf("Average Waiting Time    : %.2f\n",awt);
+	printf("Average Response Time   : %.2f\n",res.art);
+	printf("Average Completion Time : %.2f\n",res.act);
+	printf("Average Turnaround Time : %.2f\n",res.att);
+	printf("Average Waiting Time    : %.2f\n",res.awt);
+
+	return res;
 
 }
 
 int main()
 {
 	int n,i;
+	struct stat fcfs_avg,srtf_avg,priority_avg,rr_avg;
 
 	printf("Enter the number of proceses : ");
 	scanf("%d",&n);
@@ -77,10 +85,10 @@ int main()
 		p[i].c = 0;
 	}
 
-	fcfs(p,n);
-/*	srtf(p,n);
-	priority(p,n);
-	rr(p,n);
+	fcfs_avg = fcfs(p,n);
+/*	srtf_avg = srtf(p,n);
+	priority_avg = priority(p,n);
+	rr_avg = rr(p,n);
 */
 	return 0;
 }
