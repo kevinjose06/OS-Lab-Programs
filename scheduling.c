@@ -363,6 +363,7 @@ int main()
 	rr_avg = rr(p,n);
 
 	wait = fcfs_avg.awt;
+	
 	char best[] = "FCFS is the best option\n";
 
 	if(srtf_avg.awt < wait)
