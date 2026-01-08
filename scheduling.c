@@ -7,6 +7,7 @@ process mix, determining which algorithm results in the minimum average waiting 
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 struct process
 {
@@ -251,10 +252,84 @@ struct stat priority(struct process *p, int n)
     return res;
 }
 
+struct stat rr(struct process *p, int n)
+{
+    int i, t = 0, c = 0;
+    int q = 3;               
+    struct stat res = {0};
+    struct process temp;
+
+    for (i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (p[i].at > p[j].at)
+            {
+                temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+
+    while (c < n)
+    {
+        int executed = 0;
+
+        for (i = 0; i < n; i++)
+        {
+            if (p[i].at <= t && p[i].remt > 0)
+            {
+                if (!p[i].flag)
+                {
+                    p[i].rt = t - p[i].at;
+                    p[i].flag = 1;
+                }
+
+                int et = (p[i].remt < q) ? p[i].remt : q;
+
+                p[i].remt -= et;
+                t += et;
+                executed = 1;
+
+                if (p[i].remt == 0)
+                {
+                    p[i].ct = t;
+                    c++;
+                }
+            }
+        }
+
+        if (!executed)
+            t++;
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        p[i].tt = p[i].ct - p[i].at;
+        p[i].wt = p[i].tt - p[i].bt;
+
+        res.art += p[i].rt;
+        res.act += p[i].ct;
+        res.att += p[i].tt;
+        res.awt += p[i].wt;
+    }
+
+    res.art /= n;
+    res.act /= n;
+    res.att /= n;
+    res.awt /= n;
+
+    printf("\n\t-------------------------------------------ROUND ROBIN (Q = 3)------------------------------------------\n\n");
+    print(p,res,n);
+
+    return res;
+}
 
 int main()
 {
 	int n,i;
+	float wait;
 	struct stat fcfs_avg,srtf_avg,priority_avg,rr_avg;
 
 	printf("Enter the number of proceses : ");
@@ -283,7 +358,31 @@ int main()
 
 	reset(p,n);
 	priority_avg = priority(p,n);
-/*	rr_avg = rr(p,n);
-*/
+
+	reset(p,n);
+	rr_avg = rr(p,n);
+
+	wait = fcfs_avg.awt;
+	char best[] = "FCFS is the best option\n";
+
+	if(srtf_avg.awt < wait)
+	{
+		wait = srtf_avg.awt;
+		strcpy(best,"SRTF is the best option");
+	}
+	if(priority_avg.awt < wait)
+	{
+		wait = priority_avg.awt;
+		strcpy(best,"Priority scheduling is the best option");
+	}
+	if(rr_avg.awt < wait)
+	{
+		wait = rr_avg.awt;
+		strcpy(best,"Priority scheduling is the best option");
+	}
+
+	printf("%s\n",best);
+
 	return 0;
+
 }
