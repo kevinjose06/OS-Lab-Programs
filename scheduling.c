@@ -10,7 +10,7 @@ process mix, determining which algorithm results in the minimum average waiting 
 
 struct process
 {
-	int pid,at,bt,pr,rt,ct,tt,wt,c;
+	int pid,at,bt,pr,rt,ct,tt,wt,remt,flag;
 };
 
 struct stat
@@ -62,6 +62,95 @@ struct stat fcfs(struct process *p,int n)
 
 }
 
+struct stat srtf(struct process *p,int n)
+{
+	int i,j,t = 0,c = 0,sel,next,et;
+	struct stat res = {0};
+	struct process temp;
+
+	for(i = 0;i < n;i++)
+	{
+		for(j = (i + 1);j < n;j++)
+		{
+			if(p[i].at > p[j].at)
+			{
+				temp = p[i];
+				p[i] = p[j];
+				p[j] = temp;
+			}
+		}
+	}
+
+	while(c != n)
+	{
+		sel = -1;
+		next = -1;
+		for(i = 0;i < n;i++)
+		{
+			if((p[i].at <= t) && p[i].remt > 0)
+			{
+				if((sel == -1) || (p[i].remt < p[sel].remt))
+				{
+					sel = i;
+				}
+			}
+			if(p[i].at > t)
+			{
+				if((next == -1) || (p[i].at < p[next].at))
+				{
+					next = i;
+				}
+			}
+		}
+
+		if (!p[sel].flag)
+		{
+        	{
+            		p[sel].rt = t - p[sel].at;
+            		p[sel].flag = 1;
+       	 	}
+		}
+		if(next == -1)
+		{
+			et = p[sel].remt;
+		}
+		else
+		{
+			et = (p[sel].remt < (p[next].at - t)) ? p[sel].remt : (p[next].at - t);
+		}
+
+		p[sel].remt -= et;
+	        t += et;
+
+
+	        if (p[sel].remt == 0)
+        	{
+            		p[sel].ct = t;
+            		c++;
+        	}
+
+
+
+    		for (i = 0; i < n; i++)
+    		{
+        		p[i].tt = p[i].ct - p[i].at;
+        		p[i].wt  = p[i].tt - p[i].bt;
+
+        		res.att += p[i].tt;
+        		res.awt += p[i].wt;
+        		res.art += p[i].rt;
+				res.act += p[i].ct;
+    		}
+
+			res.att /= n;
+    			res.awt /= n;
+    			res.art /= n;
+			res.act /= n;
+
+    		return res;
+	}
+}
+
 int main()
 {
 	int n,i;
@@ -80,14 +169,15 @@ int main()
 		scanf("%d",&p[i].at);
 		printf("Enter burst time of the process : ");
 		scanf("%d",&p[i].bt);
+		p[i].rt = p[i].bt;
 		printf("Enter priority of the process : ");
 		scanf("%d",&p[i].pr);
-		p[i].c = 0;
+		p[i].flag = 0;
 	}
 
 	fcfs_avg = fcfs(p,n);
-/*	srtf_avg = srtf(p,n);
-	priority_avg = priority(p,n);
+	srtf_avg = srtf(p,n);
+/*	priority_avg = priority(p,n);
 	rr_avg = rr(p,n);
 */
 	return 0;
