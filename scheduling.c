@@ -18,6 +18,38 @@ struct stat
 	float art,act,att,awt;
 };
 
+void print(struct process *p,struct stat res,int n)
+{
+	int i;
+
+	printf("---------------------------------------------------------------------------------------\n");
+	printf("| %-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-5s |\n","PID","AT","BT","RT","CT","TT","WT");
+	printf("---------------------------------------------------------------------------------------\n");
+
+	for(i = 0;i < n;i++)
+	{
+		printf("| %-5d | %-5d | %-5d | %-5d | %-5d | %-5d | %-5d |\n",p[i].pid,p[i].at,p[i].bt,p[i].rt,p[i].ct,p[i].tt,p[i].wt);
+	}
+
+	printf("Average Response Time   : %.2f\n",res.art);
+	printf("Average Completion Time : %.2f\n",res.act);
+	printf("Average Turnaround Time : %.2f\n",res.att);
+	printf("Average Waiting Time    : %.2f\n",res.awt);
+}
+
+void reset(struct process *p, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        p[i].rt = 0;
+        p[i].ct = 0;
+        p[i].tt = 0;
+        p[i].wt = 0;
+        p[i].remt = p[i].bt;
+        p[i].flag = 0;
+    }
+}
+
 struct stat fcfs(struct process *p,int n)
 {
 	int t = 0,i;
@@ -44,19 +76,7 @@ struct stat fcfs(struct process *p,int n)
 	res.awt /= n;
 
 	printf("\n\t-------------------------------------------FISRT COME FIRST SERVE------------------------------------------\n\n");
-	printf("---------------------------------------------------------------------------------------\n");
-	printf("| %-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-5s |\n","PID","AT","BT","RT","CT","TT","WT");
-	printf("---------------------------------------------------------------------------------------\n");
-
-	for(i = 0;i < n;i++)
-	{
-		printf("| %-5d | %-5d | %-5d | %-5d | %-5d | %-5d | %-5d |\n",p[i].pid,p[i].at,p[i].bt,p[i].rt,p[i].ct,p[i].tt,p[i].wt);
-	}
-
-	printf("Average Response Time   : %.2f\n",res.art);
-	printf("Average Completion Time : %.2f\n",res.act);
-	printf("Average Turnaround Time : %.2f\n",res.att);
-	printf("Average Waiting Time    : %.2f\n",res.awt);
+	print(p,res,n);
 
 	return res;
 
@@ -117,7 +137,7 @@ struct stat srtf(struct process *p,int n)
             		p[sel].flag = 1;
        	 	}
 		}
-		
+
 		if(next == -1)
 		{
 			et = p[sel].remt;
@@ -155,23 +175,82 @@ struct stat srtf(struct process *p,int n)
 	res.act /= n;
 
 	printf("\n\t-------------------------------------------SHORTEST REMAINING TIME FIRST------------------------------------------\n\n");
-	printf("---------------------------------------------------------------------------------------\n");
-	printf("| %-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-5s |\n","PID","AT","BT","RT","CT","TT","WT");
-	printf("---------------------------------------------------------------------------------------\n");
-
-	for(i = 0;i < n;i++)
-	{
-		printf("| %-5d | %-5d | %-5d | %-5d | %-5d | %-5d | %-5d |\n",p[i].pid,p[i].at,p[i].bt,p[i].rt,p[i].ct,p[i].tt,p[i].wt);
-	}
-
-	printf("Average Response Time   : %.2f\n",res.art);
-	printf("Average Completion Time : %.2f\n",res.act);
-	printf("Average Turnaround Time : %.2f\n",res.att);
-	printf("Average Waiting Time    : %.2f\n",res.awt);
+	print(p,res,n);
 
 	return res;
 
 }
+
+struct stat priority(struct process *p, int n)
+{
+    int i, j, t = 0, c = 0, sel;
+    struct stat res = {0};
+    struct process temp;
+
+    for (i = 0; i < n; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            if (p[i].at > p[j].at)
+            {
+                temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+
+    while (c < n)
+    {
+        sel = -1;
+
+        for (i = 0; i < n; i++)
+        {
+            if (p[i].at <= t && p[i].flag == 0)
+            {
+                if (sel == -1 || p[i].pr > p[sel].pr)
+                {
+                    sel = i;
+                }
+            }
+        }
+
+        if (sel == -1)
+        {
+            t++;
+            continue;
+        }
+
+        p[sel].rt = t - p[sel].at;
+
+        t += p[sel].bt;
+        p[sel].ct = t;
+        p[sel].flag = 1;
+        c++;
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        p[i].tt = p[i].ct - p[i].at;
+        p[i].wt = p[i].tt - p[i].bt;
+
+        res.art += p[i].rt;
+        res.act += p[i].ct;
+        res.att += p[i].tt;
+        res.awt += p[i].wt;
+    }
+
+    res.art /= n;
+    res.act /= n;
+    res.att /= n;
+    res.awt /= n;
+
+    printf("\n\t-------------------------------------------NON-PREEMPTIVE PRIORITY------------------------------------------\n\n");
+    print(p,res,n);
+
+    return res;
+}
+
 
 int main()
 {
@@ -198,9 +277,13 @@ int main()
 	}
 
 	fcfs_avg = fcfs(p,n);
+
+	reset(p,n);
 	srtf_avg = srtf(p,n);
-/*	priority_avg = priority(p,n);
-	rr_avg = rr(p,n);
+
+	reset(p,n);
+	priority_avg = priority(p,n);
+/*	rr_avg = rr(p,n);
 */
 	return 0;
 }
