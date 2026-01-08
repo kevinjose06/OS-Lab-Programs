@@ -85,6 +85,7 @@ struct stat srtf(struct process *p,int n)
 	{
 		sel = -1;
 		next = -1;
+
 		for(i = 0;i < n;i++)
 		{
 			if((p[i].at <= t) && p[i].remt > 0)
@@ -103,6 +104,12 @@ struct stat srtf(struct process *p,int n)
 			}
 		}
 
+		if (sel == -1)
+		{
+			t = p[next].at;
+			continue;
+		}
+
 		if (!p[sel].flag)
 		{
         	{
@@ -110,6 +117,7 @@ struct stat srtf(struct process *p,int n)
             		p[sel].flag = 1;
        	 	}
 		}
+		
 		if(next == -1)
 		{
 			et = p[sel].remt;
@@ -183,7 +191,7 @@ int main()
 		scanf("%d",&p[i].at);
 		printf("Enter burst time of the process : ");
 		scanf("%d",&p[i].bt);
-		p[i].rt = p[i].bt;
+		p[i].remt = p[i].bt;
 		printf("Enter priority of the process : ");
 		scanf("%d",&p[i].pr);
 		p[i].flag = 0;
