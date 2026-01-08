@@ -120,35 +120,49 @@ struct stat srtf(struct process *p,int n)
 		}
 
 		p[sel].remt -= et;
-	        t += et;
+		t += et;
 
 
-	        if (p[sel].remt == 0)
-        	{
-            		p[sel].ct = t;
-            		c++;
-        	}
-
-
-
-    		for (i = 0; i < n; i++)
-    		{
-        		p[i].tt = p[i].ct - p[i].at;
-        		p[i].wt  = p[i].tt - p[i].bt;
-
-        		res.att += p[i].tt;
-        		res.awt += p[i].wt;
-        		res.art += p[i].rt;
-				res.act += p[i].ct;
-    		}
-
-			res.att /= n;
-    			res.awt /= n;
-    			res.art /= n;
-			res.act /= n;
-
-    		return res;
+		if (p[sel].remt == 0)
+		{
+				p[sel].ct = t;
+				c++;
+		}
 	}
+
+	for (i = 0; i < n; i++)
+	{
+		p[i].tt = p[i].ct - p[i].at;
+		p[i].wt  = p[i].tt - p[i].bt;
+
+		res.att += p[i].tt;
+		res.awt += p[i].wt;
+		res.art += p[i].rt;
+		res.act += p[i].ct;
+	}
+
+	res.att /= n;
+	res.awt /= n;
+	res.art /= n;
+	res.act /= n;
+
+	printf("\n\t-------------------------------------------FISRT COME FIRST SERVE------------------------------------------\n\n");
+	printf("---------------------------------------------------------------------------------------\n");
+	printf("| %-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-5s |\n","PID","AT","BT","RT","CT","TT","WT");
+	printf("---------------------------------------------------------------------------------------\n");
+
+	for(i = 0;i < n;i++)
+	{
+		printf("| %-5d | %-5d | %-5d | %-5d | %-5d | %-5d | %-5d |\n",p[i].pid,p[i].at,p[i].bt,p[i].rt,p[i].ct,p[i].tt,p[i].wt);
+	}
+
+	printf("Average Response Time   : %.2f\n",res.art);
+	printf("Average Completion Time : %.2f\n",res.act);
+	printf("Average Turnaround Time : %.2f\n",res.att);
+	printf("Average Waiting Time    : %.2f\n",res.awt);
+
+	return res;
+
 }
 
 int main()
