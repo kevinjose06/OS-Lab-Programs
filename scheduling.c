@@ -320,7 +320,7 @@ struct stat rr(struct process *p, int n)
     res.att /= n;
     res.awt /= n;
 
-    printf("\n\t-------------------------------------------ROUND ROBIN (Q = 3)------------------------------------------\n\n");
+    printf("\n\t-------------------------------------------ROUND ROBIN------------------------------------------\n\n");
     print(p,res,n);
 
     return res;
