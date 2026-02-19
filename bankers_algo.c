@@ -25,9 +25,12 @@ void inputMatrix(int n, int m, int matrix[n][m], char name[])
 void calculateNeed(int n, int m,
                    int Max[n][m],
                    int Allocation[n][m],
-                   int Need[n][m]) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
+                   int Need[n][m]) 
+{
+    for (int i = 0; i < n; i++) 
+    {
+        for (int j = 0; j < m; j++) 
+        {
             Need[i][j] = Max[i][j] - Allocation[i][j];
         }
     }
@@ -37,7 +40,8 @@ bool isSafeState(int n, int m,
                  int Available[],
                  int Allocation[n][m],
                  int Need[n][m],
-                 int SafeSeq[]) {
+                 int SafeSeq[]) 
+{
 
     int Work[m];
     bool Finish[n];
@@ -49,22 +53,29 @@ bool isSafeState(int n, int m,
     for (int i = 0; i < n; i++)
         Finish[i] = false;
 
-    while (count < n) {
+    while (count < n) 
+    {
         bool found = false;
 
-        for (int i = 0; i < n; i++) {
-            if (!Finish[i]) {
+        for (int i = 0; i < n; i++) 
+        {
+            if (!Finish[i]) 
+            {
                 bool possible = true;
 
-                for (int j = 0; j < m; j++) {
-                    if (Need[i][j] > Work[j]) {
+                for (int j = 0; j < m; j++) 
+                {
+                    if (Need[i][j] > Work[j]) 
+                    {
                         possible = false;
                         break;
                     }
                 }
 
-                if (possible) {
-                    for (int k = 0; k < m; k++) {
+                if (possible) 
+                {
+                    for (int k = 0; k < m; k++) 
+                    {
                         Work[k] += Allocation[i][k];
                     }
                     SafeSeq[count++] = i;
@@ -81,15 +92,18 @@ bool isSafeState(int n, int m,
     return true;
 }
 
-void printSafeSequence(int n, int SafeSeq[]) {
+void printSafeSequence(int n, int SafeSeq[]) 
+{
     printf("\nSystem is in a SAFE state.\nSafe sequence: ");
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) 
+    {
         printf("P%d ", SafeSeq[i]);
     }
     printf("\n");
 }
 
-int main() {
+int main() 
+{
     int n, m;
 
     printf("Enter number of processes: ");
@@ -110,9 +124,11 @@ int main() {
 
     calculateNeed(n, m, Max, Allocation, Need);
 
-    if (isSafeState(n, m, Available, Allocation, Need, SafeSeq)) {
+    if (isSafeState(n, m, Available, Allocation, Need, SafeSeq)) 
+    {
         printSafeSequence(n, SafeSeq);
-    } else {
+    } else 
+    {
         printf("\nSystem is NOT in a safe state.\n");
     }
 
