@@ -1,3 +1,11 @@
+/*Simulate the FIFO, LRU, and optimal page-replacement algorithms as follows: First,
+generate a random page-reference string where page numbers range from 0 to 9. Apply the
+random page-reference string to each algorithm, and record the number of page faults
+incurred by each algorithm. Assume that demand paging is used. The length of the
+reference string and the number of page frames (varying from 1 to 7) are to be received as
+command line arguments. 
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
