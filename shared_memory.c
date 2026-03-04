@@ -1,3 +1,11 @@
+/*Using Shared Memory - The first process sends three strings to the second
+process. The second process concatenates them to a single string (with
+whitespace being inserted between the two individual strings) and sends it
+back to the first process. The first process prints the concatenated string in
+the flipped case, that is if the concatenated string is “Hello S4 Students”,
+the final output should be “hELLO s4 sTUDENTS” 
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
