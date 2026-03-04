@@ -1,3 +1,6 @@
+/*Implement the deadlock-free semaphore-based solution for the dining philosopher’s
+problem. */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
