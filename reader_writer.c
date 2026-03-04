@@ -1,3 +1,6 @@
+/*Use semaphores to solve the readers-writers problem with writers being given priority
+over readers. */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <semaphore.h>
