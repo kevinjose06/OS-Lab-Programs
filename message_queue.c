@@ -1,3 +1,10 @@
+/*Using Message Queue - The first process sends a string to the second
+process. The second process reverses the received string and sends it back
+to the first process. The first process compares the original string and the
+reversed string received from the second one and then prints whether the
+string is a palindrome or not. 
+*/
+
 #include<stdio.h>
 #include<string.h>
 #include<unistd.h>
