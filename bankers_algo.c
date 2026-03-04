@@ -1,3 +1,6 @@
+/*Obtain a (deadlock-free) process mix and simulate the banker’s algorithm to determine a
+safe execution sequence.*/
+
 #include <stdio.h>
 #include <stdbool.h>
 
