@@ -1,3 +1,5 @@
+/*Obtain a process mix and determine if the system is deadlocked. */
+
 #include <stdio.h>
 #include <stdbool.h>
 
