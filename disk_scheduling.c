@@ -1,3 +1,10 @@
+/*Simulate the SSTF, LOOK, and CSCAN disk-scheduling algorithms as follows: Your
+program will service a disk with 5,000 cylinders numbered 0 to 4,999. The program will
+generate a random series of 10 cylinder requests and service them according to each of the
+algorithms listed earlier. The program will be passed the initial position of the disk head
+(as a parameter on the command line) and will report the total number of head movements
+required by each algorithm. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
