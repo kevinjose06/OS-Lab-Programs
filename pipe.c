@@ -1,3 +1,7 @@
+/*Using Pipe – Evaluate the expression sqrt(b^2-4ac). The first process
+evaluates b^2. The second process evaluates 4ac and sends it to the first
+process which evaluates the final expression and displays it*/
+
 #include<stdio.h>
 #include<unistd.h>
 #include<math.h>
